@@ -2,19 +2,23 @@ import os.path
 import os
 
 def get_files_info(working_directory, directory="."):
+    res = []
     full_directory = os.path.join(working_directory, directory)
     path = os.path.abspath(full_directory)
+
+    # check if the given path is relative to the working_directory so the AI agent doesn't work outside our working_directory
     if not os.path.exists(path):
         return f'Error: path to "{directory}" does not exist'
     if not path.startswith(working_directory):
         return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
     if not os.path.isdir(path):
         return f'Error: "{directory}" is not a directory'
-    with open(path, "r") as f:
-        print(f)
     
-    
-
-
-
-get_files_info(os.getcwd(), "functions")
+    # For each file in our directory we want to return data on it.
+    files = os.listdir(path)
+    for file in files:
+        path_to_file = "/".join([path, file])
+        file_string = f'- {file}: file_size={os.path.getsize(path_to_file)} bytes, is_dir={os.path.isdir(path_to_file)}'
+        res.append(file_string)
+        print("\n".join(res))
+    return "\n".join(res)
