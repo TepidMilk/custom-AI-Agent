@@ -102,7 +102,8 @@ schema_run_python_file = types.FunctionDeclaration(
             ),
             "args": types.Schema(
                 type=types.Type.ARRAY,
-                description="arguments to be passed in to the executed python file."
+                description="arguments to be passed in to the executed python file.",
+                items=types.Schema(type=types.Type.STRING)
             )
         },
     ),

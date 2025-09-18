@@ -21,7 +21,6 @@ def get_files_info(working_directory, directory="."):
         path_to_file = "/".join([path, file])
         file_string = f'- {file}: file_size={os.path.getsize(path_to_file)} bytes, is_dir={os.path.isdir(path_to_file)}'
         res.append(file_string)
-        print("\n".join(res))
     return "\n".join(res)
 
 schema_get_files_info = types.FunctionDeclaration(
