@@ -48,12 +48,13 @@ def main():
         print(f'\nUser prompt: {args.user_prompt}\n')
         print(f'Prompt tokens: {p_tokens}')
         print(f'Response tokens: {r_tokens}\n')
-    print(response.text)
 
     #print out what functions the AI calls to use so we can run them
     if not response.function_calls == None:
         for f in response.function_calls:
             print(f'Calling function: {f.name}({f.args})')
+    else:
+        print(response.text)
 
 if __name__ == "__main__":
     main()
