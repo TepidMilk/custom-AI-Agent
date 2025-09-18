@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from functions.get_files_info import schema_get_files_info
+from functions.get_file_content import schema_get_file_content, schema_write_file, schema_run_python_file
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -22,7 +23,10 @@ All paths you provide should be relative to the working directory. You do not ne
 #List of availble functions that the AI has access to 
 available_functions = types.Tool(
     function_declarations=[
-        schema_get_files_info
+        schema_get_files_info,
+        schema_get_file_content,
+        schema_write_file,
+        schema_run_python_file
     ]
 )
 
