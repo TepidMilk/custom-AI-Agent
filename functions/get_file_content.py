@@ -1,4 +1,5 @@
 import subprocess, sys, os.path
+from google.genai import types
 
 MAX_LENGTH = 10000
 
@@ -50,6 +51,59 @@ def run_python_file(working_directory, file_path, args=[]):
         completed_process = subprocess.run(args=([sys.executable, path] + args), timeout=30, capture_output=True, cwd=abs_working, check=True)
         res.append(f'STDOUT: {completed_process.stdout}')
         res.append(f'STDERR: {completed_process.stderr}')
+
         return "\n".join(res)
     except Exception as e:
         return f'Error: executing Python file: {e}'
+    
+schema_write_file = types.FunctionDeclaration(
+    name="write_file",
+    description="overwrite or create a file with specified content at a specified path, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to write to or create, relative to the working directory.",
+            ),
+            "content": types.Schema(
+                type=types.Type.STRING,
+                description="The content to be used to create or overwrite at the given file path."
+            )
+        },
+        required=["file_path", "content"]
+    ),
+)
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="return up to 10000 characters of a specified file, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to read from, relative to the working directory.",
+            ),
+        },
+        required=["file_path"]
+    ),
+)
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="return the STDOUT and STDERR of subprocess.run on a python file, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to be executed, relative to the working directory.",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                description="arguments to be passed in to the executed python file."
+            )
+        },
+    ),
+)
